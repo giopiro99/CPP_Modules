@@ -1,0 +1,171 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   Fixed.cpp                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: gpirozzi <gpirozzi@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/07/22 11:28:29 by gpirozzi          #+#    #+#             */
+/*   Updated: 2025/08/06 10:49:05 by gpirozzi         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "Fixed.hpp"
+
+const int Fixed::_fraction = 8;
+
+/*---------------------------Constructor---------------------------*/
+Fixed::Fixed()
+{
+	this->fixedPoint = 0;
+}
+
+Fixed::Fixed(const Fixed& other)
+{
+	if (this != &other)
+		this->fixedPoint = other.fixedPoint;
+}
+
+Fixed::Fixed( const float floatValue)
+{
+	this->fixedPoint = roundf((floatValue * (1 << this->_fraction)));
+}
+
+Fixed::Fixed( const int intValue)
+{
+	this->fixedPoint = intValue << this->_fraction;
+}
+
+float Fixed::toFloat( void ) const
+{
+	return ((this->fixedPoint / static_cast<float>(1 << this->_fraction))); //divido x 256 x recuperare i valori dopo la virgola
+}
+
+/*---------------------------Operators---------------------------*/
+bool	Fixed::operator>(const Fixed& other) const
+{
+	return (this->fixedPoint > other.fixedPoint);
+}
+
+bool	Fixed::operator>=(const Fixed& other) const
+{
+	return (this->fixedPoint >= other.fixedPoint);
+}
+
+bool	Fixed::operator<(const Fixed& other) const
+{
+	return (this->fixedPoint < other.fixedPoint);
+}
+
+bool	Fixed::operator<=(const Fixed& other) const
+{
+	return (this->fixedPoint <= other.fixedPoint);
+}
+
+bool	Fixed::operator==(const Fixed& other) const
+{
+	return (this->fixedPoint == other.fixedPoint);
+}
+
+bool	Fixed::operator!=(const Fixed& other) const
+{
+	return (this->fixedPoint != other.fixedPoint);
+}
+
+Fixed	Fixed::operator+(const Fixed& other) const
+{
+	Fixed	result;
+
+	result.setRawBits(this->fixedPoint + other.fixedPoint);
+	return (result);
+}
+
+Fixed	Fixed::operator++( void )
+{
+	this->fixedPoint += 1;
+	return (*this);
+}
+
+Fixed	Fixed::operator++( int )
+{
+	Fixed	tmp = *this;
+	this->fixedPoint += 1;
+	return (tmp);
+}
+
+Fixed	Fixed::operator-(const Fixed& other) const
+{
+	Fixed	result;
+
+	result.setRawBits(this->fixedPoint - other.fixedPoint);
+	return (result);
+}
+
+Fixed	Fixed::operator--( void )
+{
+	this->fixedPoint -= 1;
+	return (*this);
+}
+
+Fixed	Fixed::operator--( int )
+{
+	Fixed	tmp = *this;
+	this->fixedPoint -= 1;
+	return (tmp);
+}
+
+Fixed	Fixed::operator*(const Fixed& other) const
+{
+	Fixed		result;
+	long long	tmp = static_cast<long long>(this->fixedPoint) * static_cast<long long>(other.fixedPoint);//long long per evitare overflow.
+	result.setRawBits((static_cast<int>(tmp)) >> _fraction);//dividere per 2^_fraction per riportare il risultato alla scala corretta.
+	return (result);
+}
+
+Fixed	Fixed::operator/(const Fixed& other) const
+{
+	Fixed	result;
+	long long tmp = (static_cast<long long>(this->fixedPoint) << _fraction) / static_cast<long long>(other.fixedPoint);//long long per evitare overflow.
+	result.setRawBits((static_cast<int>(tmp)));
+	return (result);
+}
+
+/*---------------------------Methods---------------------------*/
+void	Fixed::setRawBits(  int const raw )
+{
+	this->fixedPoint = raw;
+}
+
+Fixed&	Fixed::max(Fixed& a, Fixed& b)
+{
+	return (a > b ? a : b);
+}
+
+const Fixed&	Fixed::max(const Fixed& a, const Fixed& b)
+{
+	return (a > b ? a : b);
+}
+
+Fixed&	Fixed::min(Fixed& a, Fixed& b)
+{
+	return (a < b ? a : b);
+}
+
+const Fixed&	Fixed::min(const Fixed& a, const Fixed& b)
+{
+	return (a < b ? a : b);
+}
+
+/*---------------------------Functions---------------------------*/
+std::ostream& operator<<(std::ostream& os, const Fixed& FixedClass)
+{
+	os << FixedClass.toFloat();
+	return (os);
+}
+
+/*---------------------------Destructor---------------------------*/
+Fixed::~Fixed()
+{
+}
+
+

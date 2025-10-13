@@ -1,0 +1,19 @@
+static_cast
+Si usa per conversioni logiche tra tipi compatibili (es. int → double, oppure tra classi in una gerarchia nota).
+Controllo a compile-time, nessun controllo a runtime.
+Se lo usi con classi in ereditarietà, non verifica se l’oggetto è davvero di quel tipo → quindi rischi undefined behavior.
+------------------------------------------------------------------------------------------------------------
+reinterpret_cast
+Serve per conversioni “basse” → reinterpretare i bit di un oggetto come se fosse di un altro tipo.
+Nessun controllo né a compile-time né a runtime.
+Usato raramente, tipico in casi come cast da Data* a uintptr_t.
+È il più “pericoloso”: funziona solo se sai esattamente quello che stai facendo.
+------------------------------------------------------------------------------------------------------------
+dynamic_cast
+Funziona solo con classi polimorfe (serve almeno un metodo virtual nella base).
+Si usa per conversioni sicure lungo una gerarchia di ereditarietà.
+Con puntatori: se il cast fallisce → ritorna nullptr.
+Con riferimenti: se il cast fallisce → lancia std::bad_cast.
+Serve proprio per capire a runtime il tipo reale dell’oggetto.
+RTTI (Run-Time Type Information)--->permette di usare metodi delle classi derivate anche se abbiamo il puntatore della classe base
+------------------------------------------------------------------------------------------------------------
