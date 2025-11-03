@@ -33,7 +33,7 @@ template <typename container> class PmergeMe
 			iterator	binarySearch(iterator begin, iterator end, int value);
 			void		binaryInsert(container pendant, std::vector< std::pair<int, int> > pairs,int i, int forEverAlone);
 			long		getEndTime();
-			~PmergeMe();
+			~PmergeMe() {};
 };
 
 #include "PmergeMe.tpp"
