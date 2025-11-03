@@ -86,12 +86,12 @@ int main(int ac, char** av)
 
 		std::cout << "Post vector sorting: ";
 		print(vector.getContainer());
-		std::cout << "Vector time ===> " << vector.getEndTime() << std::endl;
+		std::cout << "Vector time ===> " << vector.getEndTime() << "us" << std::endl;
 		vector.isSorted();
 
 		std::cout << "Post deque sorting: ";
 		print(deque.getContainer());
-		std::cout << "Deque time ===> " << deque.getEndTime() << std::endl;
+		std::cout << "Deque time ===> " << deque.getEndTime() << "us" << std::endl;
 		deque.isSorted();
 	}
 	catch(const std::exception& e)
